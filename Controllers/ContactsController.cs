@@ -17,6 +17,24 @@ namespace AddressBookAPI.Controllers
         public ContactsController(AddressBookContext DBContext)
         {
             this.DBContext = DBContext;
+            // Check for default user
+            Console.WriteLine("Checking default user");
+            User defaultUser = DBContext.Users.First(u => u.UserId == 1);
+            bool noDefault = defaultUser == null;
+            if (noDefault)
+            {
+                defaultUser = new User()
+                {
+                    UserId = 1,
+                };
+                DBContext.Users.Add(defaultUser);
+            }
+            if (defaultUser != null)
+            {
+                defaultUser.FirstName = "Default";
+                defaultUser.LastName = "User";
+            }
+            DBContext.SaveChanges();
         }
 
         // GET: api/contacts
@@ -35,7 +53,15 @@ namespace AddressBookAPI.Controllers
                     c.Phone.Contains(search) ||
                     c.MobilePhone != null && c.MobilePhone.Contains(search) ||
                     c.Email != null && c.Email.Contains(search)
-                )).ToList();
+                )).Select(c => new Contact()
+                {
+                    UserId = c.UserId,
+                    Name = c.Name,
+                    Address = c.Address,
+                    Phone = c.Phone,
+                    MobilePhone = c.MobilePhone,
+                    Email = c.Email,
+                }).ToList();
         }
 
         // POST api/contacts
