@@ -20,6 +20,11 @@ namespace AddressBookAPI.Controllers
         }
 
         // GET: api/contacts
+        /// <summary>
+        /// Gets the list of contacts
+        /// </summary>
+        /// <param name="search">Search string to be used as filter</param>
+        /// <returns>List of contacts satisfying the search string if it is given, all contacts otherwise</returns>
         [HttpGet]
         public IEnumerable<Contact> Get([FromQuery] string? search)
         {
@@ -34,6 +39,14 @@ namespace AddressBookAPI.Controllers
         }
 
         // POST api/contacts
+        /// <summary>
+        /// Adds new contact if the following conditions are satisfied:
+        /// - Required name, address and phone fields must be given
+        /// - No contact must exist having the given name
+        /// - If email is given, it must be valid
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <exception cref="BadHttpRequestException"></exception>
         [HttpPost]
         public void Post([FromBody] ContactDTO dto)
         {
@@ -66,6 +79,12 @@ namespace AddressBookAPI.Controllers
         }
 
         // PUT api/contacts/5
+        /// <summary>
+        /// Updates the contact having the given id with the given info
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="dto"></param>
+        /// <exception cref="BadHttpRequestException"></exception>
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] ContactDTO dto)
         {
@@ -98,6 +117,10 @@ namespace AddressBookAPI.Controllers
         }
 
         // DELETE api/contacts/5
+        /// <summary>
+        /// Updates the contact having the given id
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
