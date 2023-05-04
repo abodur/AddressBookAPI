@@ -1,11 +1,15 @@
 using AddressBookAPI.Entities;
+using Microsoft.EntityFrameworkCore;
 using MySql.EntityFrameworkCore.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddEntityFrameworkMySQL().AddDbContext<AddressBookContext>();
+builder.Services.AddEntityFrameworkMySQL().AddDbContext<AddressBookContext>(options =>
+{
+    options.UseMySQL(builder.Configuration["Connection:AdressBook"]);
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
